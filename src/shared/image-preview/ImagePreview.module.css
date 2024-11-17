@@ -1,0 +1,29 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.imageContainer {
+    position: relative;
+    margin: 10px;
+    display: inline-block;
+}
+
+.closeButton {
+    position: absolute;
+    background-color: var(--negative-color);
+    top: 0px;
+    right: 0px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 2px 5px;
+    border-radius: 50%;
+    font-size: 18px;
+    line-height: 1;
+    text-align: center;
+}
+
+.fileName {
+    word-wrap: break-word;
+}

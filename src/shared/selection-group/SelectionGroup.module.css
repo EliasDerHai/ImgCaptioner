@@ -1,0 +1,22 @@
+.selectionGroup {
+  display: flex;
+}
+
+.col{
+  flex-direction: column;
+}
+
+.row{
+  flex-direction: row;
+}
+
+.selectionButton {
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background: var(--background-color);
+}
+
+.selected {
+  background-color: var(--primary-color);
+}
