@@ -3,6 +3,7 @@ import styles from './SelectionGroup.module.css';
 
 type SelectionGroupProps<T> = {
   options: SelectionOption<T>[];
+  initiallySelected?: SelectionOption<T>;
   onSelectedChange: (selected: T) => void;
   /** default: {direction: row, justify-content: flex-start }*/
   headerStyle?: Pick<JSX.CSSProperties, 'flex-direction' | 'justify-content'>;
@@ -28,7 +29,9 @@ const SelectionGroup = <T, >(props: SelectionGroupProps<T>) => {
   };
 
   // select first option if not disabled
-  if (props.options.some(option => !option.disabled)) {
+  if (props.initiallySelected && props.options.includes(props.initiallySelected)) {
+    handleSelect(props.options.indexOf(props.initiallySelected));
+  } else if (props.options.some(option => !option.disabled)) {
     handleSelect(0);
   }
 

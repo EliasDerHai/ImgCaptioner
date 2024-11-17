@@ -9,6 +9,7 @@ type ImagePreviewProps = {
 const imageSizes = ['s', 'm', 'l'] as const;
 type ImageSize = typeof imageSizes[number];
 type SizeMeta = { px: number, label: string };
+
 const ImagePreview: Component<ImagePreviewProps> = (props) => {
   const [cachedUrls, setCachedUrls] = createSignal<Map<File, string>>(new Map());
   const [imageSize, setImageSize] = createSignal<ImageSize>('m');
@@ -23,11 +24,11 @@ const ImagePreview: Component<ImagePreviewProps> = (props) => {
   }
   const imageSizeToPx = (value: ImageSize): string => `${sizeMetas[value].px}px`;
 
+  // TODO move UrlCache to AppState.tsx
   createEffect(() => {
     const urlCache = new Map<File, string>();
     props.images().forEach((file) => {
       if (!urlCache.has(file)) {
-        console.log(`Preparing ${file.name}`);
         urlCache.set(file, URL.createObjectURL(file));
       }
     });
@@ -37,7 +38,6 @@ const ImagePreview: Component<ImagePreviewProps> = (props) => {
   onMount(() => {
     const urlCache = new Map<File, string>();
     props.images().forEach((file) => {
-      console.log(`Preparing ${file.name}`);
       urlCache.set(file, URL.createObjectURL(file));
     });
     setCachedUrls(urlCache);
@@ -45,7 +45,6 @@ const ImagePreview: Component<ImagePreviewProps> = (props) => {
 
   onCleanup(() => {
     cachedUrls().forEach((url) => {
-      console.log(`Cleaning ${url}`);
       URL.revokeObjectURL(url);
     });
   });
@@ -62,7 +61,10 @@ const ImagePreview: Component<ImagePreviewProps> = (props) => {
 
   return (
     <div>
-      <SelectionGroup options={sizeOptions} onSelectedChange={setImageSize}></SelectionGroup>
+      <SelectionGroup options={sizeOptions}
+                      onSelectedChange={setImageSize}
+                      initiallySelected={sizeOptions[1]}>
+      </SelectionGroup>
       <div class={styles.container}>
         <For each={props.images()}>
           {(file) => (

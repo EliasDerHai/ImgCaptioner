@@ -1,12 +1,15 @@
-import type { Component } from 'solid-js';
+import type {Component} from 'solid-js';
 
 import styles from './App.module.css';
 import Main from './app/Main';
+import {AppProvider} from "./core/AppContext";
 
 const App: Component = () => {
   return (
     <div class={styles.App}>
-      <Main />
+      <AppProvider>
+        <Main/>
+      </AppProvider>
     </div>
   );
 };

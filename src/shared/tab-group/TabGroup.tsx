@@ -30,7 +30,7 @@ const TabGroup = (props: TabGroupProps) => {
   } else if (props.headerAlign === 'end') {
     headerStyle["justify-content"] = 'flex-end';
   }
-  console.log(headerStyle)
+
   return (
     <div>
       <SelectionGroup

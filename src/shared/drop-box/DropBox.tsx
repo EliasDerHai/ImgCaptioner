@@ -1,36 +1,36 @@
-import {Component, createSignal} from 'solid-js';
+import {Component} from 'solid-js';
 import styles from './DropBox.module.css';
 
 type DropBoxProperties = {
-  onDrop?: (files: File[]) => {},
-  height?: number
+  onFilesAdded?: (files: File[]) => void,
+  height?: number,
 }
 const DropBox: Component<DropBoxProperties> = (props) => {
-  const [images, setImages] = createSignal<File[]>([]);
 
   const handleDragOver = (e: DragEvent) => {
     e.preventDefault();
   };
 
   const onImageChange = (files: File[]) => {
-    setImages(files);
-    props.onDrop?.(files);
+    props.onFilesAdded?.(files);
+  }
+
+  function filterFiles(files: File[]) {
+    return files.filter((file) =>
+      file.type.startsWith('image/')
+    );
   }
 
   const handleDrop = (e: DragEvent) => {
     e.preventDefault();
-    const files = Array.from(e.dataTransfer?.files || []).filter((file) =>
-      file.type.startsWith('image/')
-    );
-    onImageChange([...images(), ...files]);
+    const files = filterFiles(Array.from(e.dataTransfer?.files || []));
+    onImageChange(files);
   };
 
   const handleFileInputChange = (e: Event) => {
     const input = e.target as HTMLInputElement;
-    const files = Array.from(input.files || []).filter((file) =>
-      file.type.startsWith('image/')
-    );
-    onImageChange([...images(), ...files]);
+    const files = filterFiles(Array.from(input.files || []));
+    onImageChange(files);
   };
 
   return (
