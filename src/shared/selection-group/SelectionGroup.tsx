@@ -1,10 +1,11 @@
-import { JSX, createSignal } from 'solid-js';
+import {JSX, createSignal} from 'solid-js';
 import styles from './SelectionGroup.module.css';
 
 type SelectionGroupProps<T> = {
   options: SelectionOption<T>[];
-  align?: 'horizontal' | 'vertical'; // default: horizontal
   onSelectedChange: (selected: T) => void;
+  /** default: {direction: row, justify-content: flex-start }*/
+  headerStyle?: Pick<JSX.CSSProperties, 'flex-direction' | 'justify-content'>;
 };
 
 
@@ -14,7 +15,7 @@ export type SelectionOption<T> = {
   disabled?: boolean;
 };
 
-const SelectionGroup = <T,>(props: SelectionGroupProps<T>) => {
+const SelectionGroup = <T, >(props: SelectionGroupProps<T>) => {
   const [selectedIndex, setSelectedIndex] = createSignal<number | null>(null);
 
   const handleSelect = (index: number) => {
@@ -23,7 +24,7 @@ const SelectionGroup = <T,>(props: SelectionGroupProps<T>) => {
     if (!option.disabled) {
       setSelectedIndex(index);
       props.onSelectedChange(props.options[index].value);
-    };
+    }
   };
 
   // select first option if not disabled
@@ -31,10 +32,12 @@ const SelectionGroup = <T,>(props: SelectionGroupProps<T>) => {
     handleSelect(0);
   }
 
-  const alignClass = props.align === 'vertical' ? styles.col : styles.row;
+  const headerStyle: JSX.CSSProperties = props.headerStyle
+    ?? { 'flex-direction': 'row', 'justify-content': 'flex-start' };
+  headerStyle.display = 'flex';
 
   return (
-    <div class={`${styles.selectionGroup} ${alignClass}`}>
+    <div style={headerStyle}>
       {props.options.map((option, index) => (
         <button
           type='button'

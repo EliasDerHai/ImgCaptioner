@@ -9,7 +9,7 @@
 }
 
 .toast {
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
   color: #fff;
   padding: 10px 15px;
   margin-bottom: 8px;

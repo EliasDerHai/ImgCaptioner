@@ -1,6 +1,8 @@
 :root {
   --primary-color: #0056b3;
   --background-color: #1c1b1d;
+  --semi-dark: #444;
+  --card: #123;
 
   --positive-color: #7bc28c;
   --negative-color: #e07a7a;
@@ -87,7 +89,7 @@ ul {
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
   border-radius: 4px;
   border: 3px solid var(--semi-dark);
 }

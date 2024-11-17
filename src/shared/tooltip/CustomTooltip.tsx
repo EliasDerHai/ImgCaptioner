@@ -42,6 +42,7 @@ const CustomTooltip: Component<TooltipProps> = (props) => {
     }
   });
 
+  // noinspection JSUnusedAssignment
   return <span ref={ref}>{local.children}</span>;
 };
 

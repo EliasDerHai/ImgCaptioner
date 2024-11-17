@@ -1,4 +1,4 @@
-import { Component, createSignal, For } from 'solid-js';
+import {Component, createSignal} from 'solid-js';
 import styles from './DropBox.module.css';
 
 type DropBoxProperties = {

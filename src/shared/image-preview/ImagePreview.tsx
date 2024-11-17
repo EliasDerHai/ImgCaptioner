@@ -1,5 +1,5 @@
-import { Accessor, Component, createEffect, createSignal, For, onCleanup, onMount } from 'solid-js';
-import SelectionGroup, { SelectionOption } from '../selection-group/SelectionGroup';
+import {Accessor, Component, createEffect, createSignal, For, onCleanup, onMount} from 'solid-js';
+import SelectionGroup, {SelectionOption} from '../selection-group/SelectionGroup';
 import styles from './ImagePreview.module.css';
 
 type ImagePreviewProps = {
@@ -12,7 +12,10 @@ type SizeMeta = { px: number, label: string };
 const ImagePreview: Component<ImagePreviewProps> = (props) => {
   const [cachedUrls, setCachedUrls] = createSignal<Map<File, string>>(new Map());
   const [imageSize, setImageSize] = createSignal<ImageSize>('m');
-  const sizeOptions: SelectionOption<ImageSize>[] = imageSizes.map(letter => ({ label: letter.toUpperCase(), value: letter }))
+  const sizeOptions: SelectionOption<ImageSize>[] = imageSizes.map(letter => ({
+    label: letter.toUpperCase(),
+    value: letter
+  }))
   const sizeMetas: Record<ImageSize, SizeMeta> = {
     s: { label: 'Small', px: 80 },
     m: { label: 'Medium', px: 180 },

@@ -13,8 +13,8 @@
 .closeButton {
     position: absolute;
     background-color: var(--negative-color);
-    top: 0px;
-    right: 0px;
+    top: 0;
+    right: 0;
     font-weight: bold;
     cursor: pointer;
     padding: 2px 5px;

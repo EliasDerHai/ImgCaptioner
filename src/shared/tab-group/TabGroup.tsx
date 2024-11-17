@@ -1,4 +1,4 @@
-import { createSignal, JSXElement } from 'solid-js';
+import {createSignal, JSX, JSXElement} from 'solid-js';
 import SelectionGroup from '../selection-group/SelectionGroup';
 
 type Tab = {
@@ -7,7 +7,9 @@ type Tab = {
 };
 
 type TabGroupProps = {
-  tabs: Tab[]
+  tabs: Tab[],
+  /** default: start */
+  headerAlign?: 'start' | 'center' | 'end'
 };
 
 const TabGroup = (props: TabGroupProps) => {
@@ -19,11 +21,22 @@ const TabGroup = (props: TabGroupProps) => {
 
   const options = props.tabs.map(tab => ({ label: tab.title, value: tab }));
 
+  const headerStyle: Pick<JSX.CSSProperties, 'flex-direction' | 'justify-content'> = {
+    'flex-direction': 'row',
+    'justify-content': 'flex-start'
+  };
+  if (props.headerAlign === 'center') {
+    headerStyle["justify-content"] = 'center';
+  } else if (props.headerAlign === 'end') {
+    headerStyle["justify-content"] = 'flex-end';
+  }
+  console.log(headerStyle)
   return (
     <div>
       <SelectionGroup
         options={options}
-        onSelectedChange={handleTabChange}>
+        onSelectedChange={handleTabChange}
+        headerStyle={headerStyle}>
       </SelectionGroup>
       <div>
         {activeTab()?.content}

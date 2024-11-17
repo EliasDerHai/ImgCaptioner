@@ -2,14 +2,6 @@
   display: flex;
 }
 
-.col{
-  flex-direction: column;
-}
-
-.row{
-  flex-direction: row;
-}
-
 .selectionButton {
   cursor: pointer;
   padding: 10px;

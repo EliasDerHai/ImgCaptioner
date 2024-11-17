@@ -34,6 +34,7 @@
     animation: pulsate-fwd 0.5s ease-in-out infinite both;
 }
 
+/*noinspection CssUnknownProperty*/
 @-webkit-keyframes pulsate-fwd {
     0% {
         -webkit-transform: scale(1);
@@ -51,6 +52,7 @@
     }
 }
 
+/*noinspection CssUnknownProperty*/
 @keyframes pulsate-fwd {
     0% {
         -webkit-transform: scale(1);
