@@ -1,17 +1,19 @@
-import {Accessor, Component, createEffect, createSignal, For, onCleanup, onMount} from 'solid-js';
+import {Accessor, Component, createSignal, For} from 'solid-js';
 import SelectionGroup, {SelectionOption} from '../selection-group/SelectionGroup';
 import styles from './ImagePreview.module.css';
 
 type ImagePreviewProps = {
   onRemoveImage?: (file: File) => void;
-  images: Accessor<File[]>
+  images: Accessor<{
+    file: File;
+    url: string;
+  }[]>
 }
 const imageSizes = ['s', 'm', 'l'] as const;
 type ImageSize = typeof imageSizes[number];
 type SizeMeta = { px: number, label: string };
 
 const ImagePreview: Component<ImagePreviewProps> = (props) => {
-  const [cachedUrls, setCachedUrls] = createSignal<Map<File, string>>(new Map());
   const [imageSize, setImageSize] = createSignal<ImageSize>('m');
   const sizeOptions: SelectionOption<ImageSize>[] = imageSizes.map(letter => ({
     label: letter.toUpperCase(),
@@ -24,38 +26,7 @@ const ImagePreview: Component<ImagePreviewProps> = (props) => {
   }
   const imageSizeToPx = (value: ImageSize): string => `${sizeMetas[value].px}px`;
 
-  // TODO move UrlCache to AppState.tsx
-  createEffect(() => {
-    const urlCache = new Map<File, string>();
-    props.images().forEach((file) => {
-      if (!urlCache.has(file)) {
-        urlCache.set(file, URL.createObjectURL(file));
-      }
-    });
-    setCachedUrls(urlCache);
-  });
-
-  onMount(() => {
-    const urlCache = new Map<File, string>();
-    props.images().forEach((file) => {
-      urlCache.set(file, URL.createObjectURL(file));
-    });
-    setCachedUrls(urlCache);
-  });
-
-  onCleanup(() => {
-    cachedUrls().forEach((url) => {
-      URL.revokeObjectURL(url);
-    });
-  });
-
   function onCloseImageClick(file: File): void {
-    const url = cachedUrls().get(file);
-    if (!url) {
-      console.warn(`Cannot revoke object url for ${file.name}`);
-      return;
-    }
-    URL.revokeObjectURL(url);
     props.onRemoveImage?.(file);
   }
 
@@ -67,10 +38,10 @@ const ImagePreview: Component<ImagePreviewProps> = (props) => {
       </SelectionGroup>
       <div class={styles.container}>
         <For each={props.images()}>
-          {(file) => (
+          {({ file, url }) => (
             <div class={styles.imageContainer} style={{ 'max-width': imageSizeToPx(imageSize()) }}>
               <img
-                src={URL.createObjectURL(file)}
+                src={url}
                 alt={file.name}
                 style={{ width: imageSizeToPx(imageSize()), height: imageSizeToPx(imageSize()), 'object-fit': 'cover' }}
               />

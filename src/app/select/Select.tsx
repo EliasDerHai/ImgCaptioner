@@ -6,8 +6,7 @@ import {useAppState} from "../../core/AppContext";
 
 const Select: Component = () => {
   const { state, addImages, removeImage } = useAppState();
-
-  const images = createMemo(() => state.images.map(image => image.file));
+  const images = createMemo(() => state.images);
 
   function onImagesDropped(files: File[]): void {
     const currentImages = state.images;
