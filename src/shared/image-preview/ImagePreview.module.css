@@ -12,14 +12,13 @@
 
 .closeButton {
     position: absolute;
-    background-color: var(--negative-color);
-    top: 0;
-    right: 0;
+    top: -10px;
+    right: -10px;
     font-weight: bold;
     cursor: pointer;
-    padding: 2px 5px;
+    padding: 2px 7px;
     border-radius: 50%;
-    font-size: 18px;
+    font-size: 26px;
     line-height: 1;
     text-align: center;
 }

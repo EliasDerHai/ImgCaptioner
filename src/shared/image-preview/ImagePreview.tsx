@@ -1,9 +1,12 @@
-import {Accessor, Component, createSignal, For} from 'solid-js';
+import {Accessor, Component, createMemo, createRoot, createSignal, For} from 'solid-js';
 import SelectionGroup, {SelectionOption} from '../selection-group/SelectionGroup';
 import styles from './ImagePreview.module.css';
+import CloseableImage from "./overlay-image/CloseableImage";
+import {useOverlayContext} from "../overlay/OverlayProvider";
 
 type ImagePreviewProps = {
   onRemoveImage?: (file: File) => void;
+  onImageClick?: (file: File) => void;
   images: Accessor<{
     file: File;
     url: string;
@@ -25,9 +28,32 @@ const ImagePreview: Component<ImagePreviewProps> = (props) => {
     l: { label: 'Large', px: 230 },
   }
   const imageSizeToPx = (value: ImageSize): string => `${sizeMetas[value].px}px`;
+  const { closeOverlay } = useOverlayContext();
+  const imageStyle = createMemo(() => {
+    return { width: imageSizeToPx(imageSize()), height: imageSizeToPx(imageSize()) };
+  });
 
   function onCloseImageClick(file: File): void {
     props.onRemoveImage?.(file);
+  }
+
+  function onImageClick(url: string, file: File): void {
+    function onCloseImageClick(file: File): void {
+      closeOverlay(file.name);
+    }
+
+    useOverlayContext().openOverlay(
+      createRoot(() =>
+        <div>
+          <CloseableImage url={url}
+                          file={file}
+                          onImageClick={onCloseImageClick}
+                          onCloseClick={onCloseImageClick}
+          />
+        </div>
+      ),
+      file.name
+    );
   }
 
   return (
@@ -39,18 +65,12 @@ const ImagePreview: Component<ImagePreviewProps> = (props) => {
       <div class={styles.container}>
         <For each={props.images()}>
           {({ file, url }) => (
-            <div class={styles.imageContainer} style={{ 'max-width': imageSizeToPx(imageSize()) }}>
-              <img
-                src={url}
-                alt={file.name}
-                style={{ width: imageSizeToPx(imageSize()), height: imageSizeToPx(imageSize()), 'object-fit': 'cover' }}
-              />
-              <button
-                class={styles.closeButton}
-                onClick={() => onCloseImageClick(file)}
-              >&times;</button>
-              <span class={styles.fileName}>{file.name}</span>
-            </div>
+            <CloseableImage file={file}
+                            url={url}
+                            imageStyle={imageStyle}
+                            onCloseClick={(file) => onCloseImageClick(file)}
+                            onImageClick={(file) => onImageClick(url, file)}
+            />
           )}
         </For>
       </div>

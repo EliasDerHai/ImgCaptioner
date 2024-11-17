@@ -19,6 +19,20 @@ type AppContextValue = {
 
 const AppContext = createContext<AppContextValue>();
 
+/**
+ * Usage: just add to root like
+ * ```
+ * const App: Component = () => {
+ *   return (
+ *     <div class={styles.App}>
+ *         <AppProvider>
+ *           ...
+ *         </AppProvider>
+ *     </div>
+ *   );
+ * };
+ * ```
+ */
 export const AppProvider: ParentComponent = (props) => {
   const [state, setState] = createStore<AppState>({
     images: []

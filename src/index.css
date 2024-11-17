@@ -1,95 +1,96 @@
 :root {
-  --primary-color: #0056b3;
-  --background-color: #1c1b1d;
-  --semi-dark: #444;
-  --card: #123;
+    --primary-color: #0056b3;
+    --primary-color-intense: #007bff;
+    --background-color: #1c1b1d;
+    --semi-dark: #444;
+    --card: #123;
 
-  --positive-color: #7bc28c;
-  --negative-color: #e07a7a;
+    --positive-color: #7bc28c;
+    --negative-color: #e07a7a;
 }
 
 
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: var(--background-color);
-  color: white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--background-color);
+    color: white;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
 
 button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  font-family: 'Raleway', sans-serif;
-  color: #fff;
-  background-color: var(--primary-color);
-  cursor: pointer;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-family: 'Raleway', sans-serif;
+    color: #fff;
+    background-color: var(--primary-color);
+    cursor: pointer;
 }
 
 button:hover {
-  background-color: var(--primary-color);
+    background-color: var(--primary-color-intense);
 }
 
 button:active {
-  background-color: #004085;
+    background-color: #004085;
 }
 
 button:disabled {
-  background-color: #6c757d;
-  cursor: not-allowed;
+    background-color: #6c757d;
+    cursor: not-allowed;
 }
 
 h1 {
-  font-size: 22pt;
+    font-size: 22pt;
 }
 
 h2 {
-  font-size: 18pt;
+    font-size: 18pt;
 }
 
 h1,
 h2,
 h3,
 h4 {
-  font-style: italic;
-  font-weight: 300;
-  margin: 0;
-  padding: 0;
+    font-style: italic;
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
 }
 
 ul {
-  padding: 1em 2em;
-  margin: 0;
-  list-style-type: square;
+    padding: 1em 2em;
+    margin: 0;
+    list-style-type: square;
 }
 
 /* Scrollbar */
 /* Works on Firefox */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: var(--card) var(--semi-dark);
+    scrollbar-width: thin;
+    scrollbar-color: var(--card) var(--semi-dark);
 }
 
 /* Works on Chrome, Edge, and Safari */
 *::-webkit-scrollbar {
-  width: 16px;
+    width: 16px;
 }
 
 *::-webkit-scrollbar-track {
-  background: var(--semi-dark);
+    background: var(--semi-dark);
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: var(--primary-color);
-  border-radius: 4px;
-  border: 3px solid var(--semi-dark);
+    background-color: var(--primary-color);
+    border-radius: 4px;
+    border: 3px solid var(--semi-dark);
 }

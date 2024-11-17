@@ -16,7 +16,10 @@ const Select: Component = () => {
   return (
     <div class={styles.container}>
       <DropBox onFilesAdded={onImagesDropped}></DropBox>
-      <ImagePreview images={images} onRemoveImage={removeImage}/>
+      <ImagePreview
+        images={images}
+        onRemoveImage={removeImage}
+      />
     </div>
   );
 };
