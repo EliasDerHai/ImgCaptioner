@@ -1,3 +1,7 @@
+/**
+ * [png chunks]{@link http://www.libpng.org/pub/png/spec/1.2/PNG-Chunks.html}
+ * extracts tEXt Textual data from png
+ * */
 function parsePngMetadata(uint8Array: Uint8Array): string | null {
   const textDecoder = new TextDecoder();
   let index = 8; // Skip the PNG header

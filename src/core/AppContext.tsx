@@ -1,5 +1,6 @@
 import {createContext, ParentComponent, useContext} from 'solid-js';
 import {createStore} from 'solid-js/store';
+import {parsePng} from "../app/caption/parse-png";
 
 export type AppState = {
   images: ImageWithMeta[]
@@ -7,8 +8,10 @@ export type AppState = {
 
 export type ImageWithMeta = {
   file: File;
-  /** as per {@link URL.createObjectURL} */
+  /** URL as per {@link URL.createObjectURL} */
   url: string;
+  /** embedded tExt as per {@link parsePng} */
+  prompt: Promise<string | null>;
 }
 
 type AppContextValue = {
@@ -43,13 +46,14 @@ export const AppProvider: ParentComponent = (props) => {
     addImages: (files: File[]) => {
       const newImages: ImageWithMeta[] = files.map(file => {
         const url = URL.createObjectURL(file);
-        return ({ file, url });
+        const prompt = parsePng(file);
+        return ({ file, url, prompt });
       });
       setState('images', [...state.images, ...newImages]);
     },
     removeImage: (fileToRemove: File) => {
       const imageToRemove = state.images.find(i => i.file === fileToRemove);
-      if(!imageToRemove) {
+      if (!imageToRemove) {
         console.warn(`Cannot remove file "${fileToRemove.name}" - not found`);
         return;
       }

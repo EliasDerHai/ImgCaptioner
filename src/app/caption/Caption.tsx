@@ -1,17 +1,12 @@
-import {Component, createEffect, createSignal, Show} from 'solid-js';
+import {Component, createSignal, Show} from 'solid-js';
 import styles from './Caption.module.css';
 import {ImageWithMeta, useAppState} from "../../core/AppContext";
-import {parsePng} from "./parse-png";
 import ImagePreview from "../../shared/image-preview/ImagePreview";
 import CloseableImage from "../../shared/image-preview/overlay-image/CloseableImage";
 
 const Caption: Component = () => {
   const { state } = useAppState();
   const [selectedImage, setSelectedImage] = createSignal<ImageWithMeta | null>(null);
-  createEffect(async () => {
-    const prompts = await Promise.all(state.images.map(async i => parsePng(i.file)));
-    prompts.forEach(p => console.log(p));
-  })
 
   function onImageClick(file: File): void {
     console.log(`Clicked ${file.name}`)
