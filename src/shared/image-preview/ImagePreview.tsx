@@ -5,7 +5,9 @@ import CloseableImage from "./overlay-image/CloseableImage";
 import {useOverlayContext} from "../overlay/OverlayProvider";
 
 type ImagePreviewProps = {
+  /** only shows x-button when set */
   onRemoveImage?: (file: File) => void;
+  /** default behavior is full-screen preview but can be overwritten */
   onImageClick?: (file: File) => void;
   images: Accessor<{
     file: File;
@@ -32,10 +34,6 @@ const ImagePreview: Component<ImagePreviewProps> = (props) => {
   const imageStyle = createMemo(() => {
     return { width: imageSizeToPx(imageSize()), height: imageSizeToPx(imageSize()) };
   });
-
-  function onCloseImageClick(file: File): void {
-    props.onRemoveImage?.(file);
-  }
 
   function onImageClick(url: string, file: File): void {
     function onCloseImageClick(file: File): void {
@@ -68,8 +66,12 @@ const ImagePreview: Component<ImagePreviewProps> = (props) => {
             <CloseableImage file={file}
                             url={url}
                             imageStyle={imageStyle}
-                            onCloseClick={(file) => onCloseImageClick(file)}
-                            onImageClick={(file) => onImageClick(url, file)}
+                            onCloseClick={props.onRemoveImage
+                              ? (file) => props.onRemoveImage?.(file)
+                              : undefined}
+                            onImageClick={(file) => props.onImageClick
+                              ? props.onImageClick(file)
+                              : onImageClick(url, file)}
             />
           )}
         </For>

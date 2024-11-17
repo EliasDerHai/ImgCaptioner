@@ -77,7 +77,7 @@ ul {
 /* Works on Firefox */
 * {
     scrollbar-width: thin;
-    scrollbar-color: var(--card) var(--semi-dark);
+    scrollbar-color: var(--primary-color) var(--semi-dark);
 }
 
 /* Works on Chrome, Edge, and Safari */

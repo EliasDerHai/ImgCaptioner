@@ -5,7 +5,7 @@ type OverlayImageProperties = {
   file: File;
   url: string;
   /** default: { 'max-height': '90vh' } */
-  imageStyle?: Accessor<Partial<Pick<JSX.CSSProperties, 'max-height' | 'width' | 'height'>>>;
+  imageStyle?: Accessor<JSX.CSSProperties>;
   onImageClick?: (file: File) => void;
   onCloseClick?: (file: File) => void;
 };
