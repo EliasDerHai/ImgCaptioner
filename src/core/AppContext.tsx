@@ -1,9 +1,11 @@
 import {createContext, ParentComponent, useContext} from 'solid-js';
-import {createStore} from 'solid-js/store';
+import {createStore, SetStoreFunction} from 'solid-js/store';
 import {parsePng} from "../app/caption/parse-png";
+import {useToastContext} from "../shared/toast/ToastContext";
 
 export type AppState = {
-  images: ImageWithMeta[]
+  images: ImageWithMeta[];
+  tags: string[];
 }
 
 export type ImageWithMeta = {
@@ -12,10 +14,12 @@ export type ImageWithMeta = {
   url: string;
   /** embedded tExt as per {@link parsePng} */
   prompt: Promise<string | null>;
+  caption: string;
 }
 
 type AppContextValue = {
   state: AppState;
+  setState: SetStoreFunction<AppState>;
   addImages: (files: File[]) => void;
   removeImage: (file: File) => void;
 }
@@ -38,16 +42,28 @@ const AppContext = createContext<AppContextValue>();
  */
 export const AppProvider: ParentComponent = (props) => {
   const [state, setState] = createStore<AppState>({
-    images: []
+    images: [],
+    tags: [],
   });
-
+  const { addToast } = useToastContext();
   const contextValue: AppContextValue = {
     state,
+    setState,
     addImages: (files: File[]) => {
       const newImages: ImageWithMeta[] = files.map(file => {
         const url = URL.createObjectURL(file);
-        const prompt = parsePng(file);
-        return ({ file, url, prompt });
+        const prompt = parsePng(file)
+          .then(value => {
+            if (value && value.includes('Negative prompt:')) {
+              addToast(`Prompt could be extracted from ${file.name}`);
+              return value.split('Negative prompt:')[0];
+            } else {
+              console.warn(`No prompt in ${file.name}`);
+              return null;
+            }
+          });
+
+        return ({ file, url, prompt, caption: '' });
       });
       setState('images', [...state.images, ...newImages]);
     },

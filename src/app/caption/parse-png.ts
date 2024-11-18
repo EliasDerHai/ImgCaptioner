@@ -28,9 +28,6 @@ function parsePngMetadata(uint8Array: Uint8Array): string | null {
     // If it's a tEXt chunk, parse it
     if (type === "tEXt") {
       const text = textDecoder.decode(data);
-      console.log("tEXt Chunk:", text);
-
-      // Extract the Stable Diffusion prompt if present
       const [key, value] = text.split("\0");
       if (key === "parameters" || key === "prompt") {
         return value;
