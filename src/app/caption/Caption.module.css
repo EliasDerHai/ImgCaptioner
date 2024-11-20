@@ -18,3 +18,15 @@
     background-color: var(--card);
     color: white;
 }
+
+.suggestions {
+    display: flex;
+    column-gap: 30px;
+    overflow-y: hidden;
+
+    button {
+        background-color: transparent;
+        padding: 5px;
+        height: 40px;
+    }
+}
