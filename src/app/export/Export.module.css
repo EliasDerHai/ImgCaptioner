@@ -1,0 +1,10 @@
+.container {
+    width: 1000px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.download {
+    margin-top: 2em;
+}
