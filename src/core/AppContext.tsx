@@ -53,17 +53,21 @@ export const AppProvider: ParentComponent = (props) => {
       const newImages: ImageWithMeta[] = files.map(file => {
         const url = URL.createObjectURL(file);
         const prompt = parsePng(file)
-          .then(value => {
-            if (value && value.includes('Negative prompt:')) {
-              addToast(`Prompt could be extracted from ${file.name}`);
-              return value.split('Negative prompt:')[0];
-            } else {
-              console.warn(`No prompt in ${file.name}`);
-              return null;
-            }
-          });
+        const imageWithMeta: ImageWithMeta = { file, url, prompt, caption: '' };
 
-        return ({ file, url, prompt, caption: '' });
+        prompt.then(value => {
+          if (value && value.includes('Negative prompt:')) {
+            addToast(`Prompt could be extracted from ${file.name}`);
+            const positivePrompt = value.split('Negative prompt:')[0];
+            imageWithMeta.caption = positivePrompt;
+            return positivePrompt;
+          } else {
+            console.warn(`No prompt in ${file.name}`);
+            return null;
+          }
+        });
+
+        return imageWithMeta;
       });
       setState('images', [...state.images, ...newImages]);
     },

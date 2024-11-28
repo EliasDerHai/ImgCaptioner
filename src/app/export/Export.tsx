@@ -9,9 +9,10 @@ const Export: Component = () => {
   const downloadZip = async () => {
     const zip = new JSZip();
     state.images.forEach(({ file, caption }, index) => {
-      const filename = file.name.substring(file.name.lastIndexOf('.'));
+      const filename = file.name.substring(0, file.name.lastIndexOf('.'));
       const txtFileName = `${filename}.txt`;
       zip.file(txtFileName, caption);
+      console.log(`Zipped: ${txtFileName}`);
     });
 
     // Generate the ZIP file
