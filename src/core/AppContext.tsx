@@ -13,7 +13,7 @@ export type ImageWithMeta = {
   /** URL as per {@link URL.createObjectURL} */
   url: string;
   /** embedded tExt as per {@link parsePng} */
-  prompt: Promise<string | null>;
+  prompt: string | null;
   caption: string;
 }
 
@@ -49,26 +49,21 @@ export const AppProvider: ParentComponent = (props) => {
   const contextValue: AppContextValue = {
     state,
     setState,
-    addImages: (files: File[]) => {
-      const newImages: ImageWithMeta[] = files.map(file => {
+    addImages: async (files: File[]) => {
+      const newImages: ImageWithMeta[] = await Promise.all(files.map(async file => {
         const url = URL.createObjectURL(file);
-        const prompt = parsePng(file)
+        const prompt = await parsePng(file)
         const imageWithMeta: ImageWithMeta = { file, url, prompt, caption: '' };
 
-        prompt.then(value => {
-          if (value && value.includes('Negative prompt:')) {
+          if (prompt && prompt.includes('Negative prompt:')) {
             addToast(`Prompt could be extracted from ${file.name}`);
-            const positivePrompt = value.split('Negative prompt:')[0];
-            imageWithMeta.caption = positivePrompt;
-            return positivePrompt;
+            imageWithMeta.caption = prompt.split('Negative prompt:')[0];
           } else {
             console.warn(`No prompt in ${file.name}`);
-            return null;
           }
-        });
 
         return imageWithMeta;
-      });
+      }));
       setState('images', [...state.images, ...newImages]);
     },
     removeImage: (fileToRemove: File) => {

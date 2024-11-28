@@ -1,18 +1,24 @@
-import {Accessor, Component, createMemo, createRoot, createSignal, For} from 'solid-js';
+import {Accessor, Component, createMemo, createRoot, createSignal, For, JSX, Show} from 'solid-js';
 import SelectionGroup, {SelectionOption} from '../selection-group/SelectionGroup';
 import styles from './ImagePreview.module.css';
 import CloseableImage from "./overlay-image/CloseableImage";
 import {useOverlayContext} from "../overlay/OverlayProvider";
+import CustomTooltip from "../tooltip/CustomTooltip";
+import {convertJsxToHtmlString} from "../../core/util/dom";
+
+export type PreviewImage = {
+  file: File;
+  url: string;
+  tooltip?: JSX.Element;
+  subTitle?: string
+};
 
 type ImagePreviewProps = {
   /** only shows x-button when set */
   onRemoveImage?: (file: File) => void;
   /** default behavior is full-screen preview but can be overwritten */
   onImageClick?: (file: File) => void;
-  images: Accessor<{
-    file: File;
-    url: string;
-  }[]>
+  images: Accessor<PreviewImage[]>
 }
 const imageSizes = ['s', 'm', 'l'] as const;
 type ImageSize = typeof imageSizes[number];
@@ -62,17 +68,34 @@ const ImagePreview: Component<ImagePreviewProps> = (props) => {
       </SelectionGroup>
       <div class={styles.container}>
         <For each={props.images()}>
-          {({ file, url }) => (
-            <CloseableImage file={file}
-                            url={url}
-                            imageStyle={imageStyle}
-                            onCloseClick={props.onRemoveImage
-                              ? (file) => props.onRemoveImage?.(file)
-                              : undefined}
-                            onImageClick={(file) => props.onImageClick
-                              ? props.onImageClick(file)
-                              : onImageClick(url, file)}
-            />
+          {({ file, url, tooltip, subTitle }) => (
+            <div class={styles.imageContainer}>
+              <Show when={tooltip}
+                    fallback={<CloseableImage file={file}
+                                              url={url}
+                                              imageStyle={imageStyle}
+                                              onCloseClick={props.onRemoveImage
+                                                ? (file) => props.onRemoveImage?.(file)
+                                                : undefined}
+                                              onImageClick={(file) => props.onImageClick
+                                                ? props.onImageClick(file)
+                                                : onImageClick(url, file)}
+                    />}>
+                <CustomTooltip content={convertJsxToHtmlString(tooltip)} asHtml={true}>
+                  <CloseableImage file={file}
+                                  url={url}
+                                  imageStyle={imageStyle}
+                                  onCloseClick={props.onRemoveImage
+                                    ? (file) => props.onRemoveImage?.(file)
+                                    : undefined}
+                                  onImageClick={(file) => props.onImageClick
+                                    ? props.onImageClick(file)
+                                    : onImageClick(url, file)}
+                  />
+                </CustomTooltip>
+              </Show>
+              <span>{subTitle}</span>
+            </div>
           )}
         </For>
       </div>

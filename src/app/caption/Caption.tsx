@@ -1,7 +1,7 @@
-import {Component, createMemo, createSignal, For, onMount, Show} from 'solid-js';
+import {Accessor, Component, createMemo, createSignal, For, onMount, Show} from 'solid-js';
 import styles from './Caption.module.css';
 import {ImageWithMeta, useAppState} from "../../core/AppContext";
-import ImagePreview from "../../shared/image-preview/ImagePreview";
+import ImagePreview, {PreviewImage} from "../../shared/image-preview/ImagePreview";
 import CloseableImage from "../../shared/image-preview/overlay-image/CloseableImage";
 import {getTagsOfText, tail} from "./tags";
 
@@ -98,9 +98,19 @@ const Caption: Component = () => {
     }
   })
 
+  const images: Accessor<PreviewImage[]> = createMemo(() =>
+    state.images.map(({ file, url, caption }) =>
+      ({
+        file,
+        url,
+        tooltip: <div>{caption}</div>,
+        subTitle: `${caption.split(' ').length} words`,
+      })
+    ));
+
   return (
     <div class={styles.container}>
-      <ImagePreview images={() => state.images} onImageClick={onImageClick}/>
+      <ImagePreview images={images} onImageClick={onImageClick}/>
       <Show when={selectedImage() !== null}>
         <CloseableImage file={selectedImage()?.file as File}
                         url={selectedImage()?.url as string}
