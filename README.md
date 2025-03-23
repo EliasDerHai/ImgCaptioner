@@ -1,34 +1,40 @@
-## Usage
+## About
 
-Those templates dependencies are maintained via [pnpm](https://pnpm.io) via `pnpm up -Lri`.
+Standalone util to caption images for lora or stable-diffusion training. No server required - fully local, modifiable, minimalistic.
 
-This is the reason you see a `pnpm-lock.yaml`. That being said, any package manager will work. This file can be safely be removed once you clone a template.
+Flow:
+ - Select images
+ - Modify existing embedded prompt (only for png with tEXt Textual embedding - e.g. Automatic1111 generated images)
+ - Iterate over all images
+ - Export the captions (naming of .txt always respective to img file)
+ - Use captions and images with [kohya](https://github.com/bmaltais/kohya_ss) or any other training framework
+
+<br>
+<br>
+
+![demo.gif](demo/demo.gif)
+
+*Demo*
+
+<br>
+
+![exported.JPG](demo/exported.JPG)
+
+*Exported captions*
+
+## Run 
 
 ```bash
-$ npm install # or pnpm install or yarn install
+$ npm install
 ```
 
-### Learn more on the [Solid Website](https://solidjs.com) and come chat with us on our [Discord](https://discord.com/invite/solidjs)
+```bash
+$ npm run dev
+```
 
-## Available Scripts
+open `localhost:3000`
 
-In the project directory, you can run:
-
-### `npm run dev` or `npm start`
-
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
-
-### `npm run build`
-
-Builds the app for production to the `dist` folder.<br>
-It correctly bundles Solid in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
-
-## Deployment
-
-You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)
+**Images used for demo**
+* https://civitai.com/images/20191669
+* https://civitai.com/images/19370040
+* https://civitai.com/images/13194325
